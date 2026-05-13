@@ -3,12 +3,12 @@ import useAuthStore from '../../store/useAuthStore'
 import useOrdersStore from '../../store/useOrdersStore'
 import { PRODUCTS, VENUES, ORDER_STATUSES } from '../../constants/mockData'
 
-const TABS = ['Заказы', 'Товары', 'Заведения', 'Пользователи']
+const TABS = ['Заказы', 'Тендеры', 'Товары', 'Заведения', 'Пользователи']
 
 const DEMO_USERS = [
-  { id: 1, name: 'Алия', email: 'user@demo.kz', role: 'user' },
-  { id: 2, name: 'Кондитерская', email: 'venue@demo.kz', role: 'venue' },
-  { id: 3, name: 'Администратор', email: 'admin@demo.kz', role: 'admin' },
+  { id: 1, name: 'Алия', email: 'user@demo.kz', role: 'user', orders: 3 },
+  { id: 2, name: 'Кондитерская', email: 'venue@demo.kz', role: 'venue', orders: 0 },
+  { id: 3, name: 'Администратор', email: 'admin@demo.kz', role: 'admin', orders: 0 },
 ]
 
 export default function AdminPage() {
@@ -18,44 +18,60 @@ export default function AdminPage() {
 
   if (!user || role !== 'admin') {
     return (
-      <div className="text-center py-20">
-        <div className="text-6xl mb-4">🔒</div>
-        <p className="text-gray-500">Доступ только для администраторов</p>
+      <div style={{ textAlign: 'center', padding: '80px 24px' }}>
+        <div style={{ fontSize: 56, marginBottom: 12 }}>🔒</div>
+        <p style={{ color: '#a8a29e' }}>Доступ только для администраторов</p>
       </div>
     )
   }
 
+  const directOrders = orders.filter((o) => o.type !== 'tender')
+  const tenderOrders = orders.filter((o) => o.type === 'tender')
+  const revenue = directOrders.filter((o) => o.status === 'delivered').reduce((s, o) => s + o.total, 0)
+  const tenderRevenue = tenderOrders.filter((o) => o.acceptedBidId).reduce((s, o) => s + o.total, 0)
+
   const stats = [
-    { icon: '📦', label: 'Всего заказов', value: orders.length },
-    { icon: '🍰', label: 'Товаров', value: PRODUCTS.length },
-    { icon: '🏪', label: 'Заведений', value: VENUES.length },
-    { icon: '👤', label: 'Пользователей', value: DEMO_USERS.length },
+    { icon: '📦', label: 'Прямых заказов', value: directOrders.length, sub: `${directOrders.filter((o) => o.status !== 'delivered' && o.status !== 'cancelled').length} активных` },
+    { icon: '🏆', label: 'Тендеров', value: tenderOrders.length, sub: `${tenderOrders.filter((o) => o.status === 'bidding').length} в торгах` },
+    { icon: '💰', label: 'Выручка', value: `${(revenue + tenderRevenue).toLocaleString()} ₸`, sub: 'доставленные заказы' },
+    { icon: '🏪', label: 'Заведений', value: VENUES.length, sub: `${PRODUCTS.length} товаров` },
   ]
 
   return (
-    <div className="space-y-6">
-      <h1 className="text-2xl font-bold text-gray-800">Админ-панель</h1>
+    <div style={{ maxWidth: 1000, margin: '0 auto', padding: '40px 24px' }}>
+      <p style={{ color: '#f472b6', letterSpacing: '0.3em', textTransform: 'uppercase', fontSize: 10, marginBottom: 8 }}>Управление</p>
+      <h1 style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 30, fontWeight: 700, color: '#1c1917', marginBottom: 28 }}>
+        Админ-панель
+      </h1>
 
-      {/* Статистика */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+      {/* Stats */}
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 14, marginBottom: 28 }}>
         {stats.map((s) => (
-          <div key={s.label} className="bg-white rounded-2xl border border-gray-100 shadow-sm p-4 text-center">
-            <div className="text-3xl mb-1">{s.icon}</div>
-            <div className="text-2xl font-bold text-gray-800">{s.value}</div>
-            <div className="text-xs text-gray-400">{s.label}</div>
+          <div key={s.label} style={{ backgroundColor: '#fff', borderRadius: 18, border: '1px solid #f0ede8', padding: '18px', textAlign: 'center' }}>
+            <div style={{ fontSize: 28, marginBottom: 6 }}>{s.icon}</div>
+            <div style={{ fontSize: 20, fontWeight: 800, color: '#1c1917', marginBottom: 2 }}>{s.value}</div>
+            <div style={{ fontSize: 11, color: '#1c1917', fontWeight: 600, marginBottom: 2 }}>{s.label}</div>
+            <div style={{ fontSize: 10, color: '#a8a29e' }}>{s.sub}</div>
           </div>
         ))}
       </div>
 
-      {/* Вкладки */}
-      <div className="flex gap-2 flex-wrap">
+      {/* Tabs */}
+      <div style={{ display: 'flex', gap: 8, marginBottom: 20, flexWrap: 'wrap' }}>
         {TABS.map((t, i) => (
           <button
             key={t}
             onClick={() => setTab(i)}
-            className={`px-4 py-2 rounded-full text-sm font-medium transition ${
-              tab === i ? 'bg-pink-500 text-white' : 'bg-white border border-gray-200 text-gray-600'
-            }`}
+            style={{
+              padding: '8px 18px',
+              borderRadius: 99,
+              border: `1px solid ${tab === i ? '#1c1917' : '#e7e5e4'}`,
+              backgroundColor: tab === i ? '#1c1917' : '#fff',
+              color: tab === i ? '#fff' : '#78716c',
+              fontSize: 13,
+              fontWeight: 500,
+              cursor: 'pointer',
+            }}
           >
             {t}
           </button>
@@ -64,99 +80,180 @@ export default function AdminPage() {
 
       {/* Заказы */}
       {tab === 0 && (
-        <div className="space-y-3">
-          {orders.map((order) => {
-            const status = ORDER_STATUSES[order.status]
-            return (
-              <div key={order.id} className="bg-white rounded-2xl border border-gray-100 shadow-sm p-4">
-                <div className="flex items-center justify-between mb-2">
-                  <div>
-                    <span className="font-bold text-gray-800">{order.id}</span>
-                    <span className="text-gray-400 text-sm ml-2">· {order.name}</span>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+          {directOrders.length === 0 ? (
+            <Empty>Нет прямых заказов</Empty>
+          ) : (
+            directOrders.map((order) => <AdminOrderCard key={order.id} order={order} onUpdate={updateStatus} />)
+          )}
+        </div>
+      )}
+
+      {/* Тендеры */}
+      {tab === 1 && (
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+          {tenderOrders.length === 0 ? (
+            <Empty>Нет тендеров</Empty>
+          ) : (
+            tenderOrders.map((order) => {
+              const status = ORDER_STATUSES[order.status] || { label: order.status, color: 'text-gray-600 bg-gray-100' }
+              const bestBid = order.bids?.length > 0 ? [...order.bids].sort((a, b) => a.price - b.price)[0] : null
+              const acceptedBid = order.bids?.find((b) => b.id === order.acceptedBidId)
+
+              return (
+                <div key={order.id} style={{ backgroundColor: '#fff', borderRadius: 18, border: '1px solid #f0ede8', padding: '18px 22px' }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 12 }}>
+                    <div>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 4 }}>
+                        <span style={{ fontSize: 10, fontWeight: 700, color: '#7c3aed', background: '#f3e8ff', padding: '2px 7px', borderRadius: 99 }}>ТЕНДЕР</span>
+                        <span style={{ fontWeight: 700, color: '#1c1917' }}>{order.id}</span>
+                        <span style={{ fontSize: 12, color: '#a8a29e' }}>· {order.name}</span>
+                      </div>
+                      <p style={{ fontSize: 11, color: '#a8a29e' }}>
+                        {new Date(order.createdAt).toLocaleString('ru-RU', { day: 'numeric', month: 'long', hour: '2-digit', minute: '2-digit' })}
+                      </p>
+                    </div>
+                    <span style={{ fontSize: 11, fontWeight: 600, padding: '4px 10px', borderRadius: 99 }} className={status.color}>
+                      {status.label}
+                    </span>
                   </div>
-                  <span className={`text-xs font-semibold px-2 py-1 rounded-full ${status.color}`}>
-                    {status.label}
-                  </span>
+
+                  <div style={{ display: 'flex', gap: 16, flexWrap: 'wrap', fontSize: 13, color: '#78716c', marginBottom: 12 }}>
+                    <span>🏷️ Ставок: {order.bids?.length || 0}</span>
+                    <span>💰 Ориент.: {order.estimatedPrice?.toLocaleString() || order.total.toLocaleString()} ₸</span>
+                    {bestBid && <span>📉 Лучшая: {bestBid.price.toLocaleString()} ₸ ({bestBid.venueName})</span>}
+                    {acceptedBid && <span style={{ color: '#059669', fontWeight: 600 }}>✓ Принята: {acceptedBid.venueName}</span>}
+                  </div>
+
+                  {order.bids?.length > 0 && (
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+                      {[...order.bids].sort((a, b) => a.price - b.price).map((bid) => (
+                        <div key={bid.id} style={{ display: 'flex', justifyContent: 'space-between', fontSize: 12, padding: '6px 10px', borderRadius: 8, backgroundColor: bid.id === order.acceptedBidId ? '#f0fdf4' : '#faf8f4' }}>
+                          <span style={{ color: '#57534e' }}>{bid.venueName}</span>
+                          <span style={{ fontWeight: 700, color: bid.id === order.acceptedBidId ? '#059669' : '#1c1917' }}>{bid.price.toLocaleString()} ₸</span>
+                        </div>
+                      ))}
+                    </div>
+                  )}
                 </div>
-                <div className="flex items-center justify-between">
-                  <span className="text-sm text-gray-500">
-                    {order.items.length} позиций · {order.delivery === 'delivery' ? 'Доставка' : 'Самовывоз'}
-                  </span>
-                  <span className="font-bold text-pink-500">{order.total.toLocaleString()} ₸</span>
-                </div>
-                <div className="flex gap-2 mt-3">
-                  {['pending','confirmed','preparing','ready','delivered'].map((s) => (
-                    <button
-                      key={s}
-                      onClick={() => updateStatus(order.id, s)}
-                      className={`flex-1 text-xs py-1 rounded-lg transition border ${
-                        order.status === s
-                          ? 'bg-pink-500 text-white border-pink-500'
-                          : 'border-gray-200 text-gray-500 hover:border-pink-300'
-                      }`}
-                    >
-                      {ORDER_STATUSES[s].label.split(' ')[0]}
-                    </button>
-                  ))}
-                </div>
-              </div>
-            )
-          })}
+              )
+            })
+          )}
         </div>
       )}
 
       {/* Товары */}
-      {tab === 1 && (
-        <div className="space-y-3">
+      {tab === 2 && (
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
           {PRODUCTS.map((p) => (
-            <div key={p.id} className="bg-white rounded-2xl border border-gray-100 shadow-sm p-4 flex gap-4 items-center">
-              <img src={p.image} alt={p.name} className="w-14 h-14 rounded-xl object-cover" />
-              <div className="flex-1">
-                <p className="font-semibold text-gray-800 text-sm">{p.name}</p>
-                <p className="text-xs text-gray-400">{p.venue}</p>
+            <div key={p.id} style={{ backgroundColor: '#fff', borderRadius: 16, border: '1px solid #f0ede8', padding: '14px 18px', display: 'flex', alignItems: 'center', gap: 14 }}>
+              <img src={p.image} alt={p.name} style={{ width: 50, height: 50, borderRadius: 10, objectFit: 'cover' }} />
+              <div style={{ flex: 1 }}>
+                <p style={{ fontWeight: 600, color: '#1c1917', fontSize: 14, marginBottom: 2 }}>{p.name}</p>
+                <p style={{ fontSize: 12, color: '#a8a29e' }}>{p.venue} · ⭐ {p.rating}</p>
               </div>
-              <span className="font-bold text-pink-500">{p.price.toLocaleString()} ₸</span>
+              <span style={{ fontWeight: 700, color: '#ec4899', fontSize: 16 }}>{p.price.toLocaleString()} ₸</span>
             </div>
           ))}
         </div>
       )}
 
       {/* Заведения */}
-      {tab === 2 && (
-        <div className="space-y-3">
+      {tab === 3 && (
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
           {VENUES.map((v) => (
-            <div key={v.id} className="bg-white rounded-2xl border border-gray-100 shadow-sm p-4 flex items-center gap-4">
-              <span className="text-3xl">🏪</span>
-              <div>
-                <p className="font-semibold text-gray-800">{v.name}</p>
-                <p className="text-xs text-gray-400">
-                  {PRODUCTS.filter((p) => p.venue === v.name).length} товаров
-                </p>
+            <div key={v.id} style={{ backgroundColor: '#fff', borderRadius: 16, border: '1px solid #f0ede8', padding: '16px 20px', display: 'flex', alignItems: 'center', gap: 14 }}>
+              <span style={{ fontSize: 28 }}>🏪</span>
+              <div style={{ flex: 1 }}>
+                <p style={{ fontWeight: 600, color: '#1c1917', marginBottom: 2 }}>{v.name}</p>
+                <p style={{ fontSize: 12, color: '#a8a29e' }}>{PRODUCTS.filter((p) => p.venue === v.name).length} товаров в каталоге</p>
               </div>
+              <span style={{ fontSize: 11, backgroundColor: '#f0fdf4', color: '#059669', padding: '4px 10px', borderRadius: 99, fontWeight: 600 }}>
+                Активно
+              </span>
             </div>
           ))}
         </div>
       )}
 
       {/* Пользователи */}
-      {tab === 3 && (
-        <div className="space-y-3">
+      {tab === 4 && (
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
           {DEMO_USERS.map((u) => (
-            <div key={u.id} className="bg-white rounded-2xl border border-gray-100 shadow-sm p-4 flex items-center gap-4">
-              <span className="text-3xl">
+            <div key={u.id} style={{ backgroundColor: '#fff', borderRadius: 16, border: '1px solid #f0ede8', padding: '16px 20px', display: 'flex', alignItems: 'center', gap: 14 }}>
+              <div style={{ width: 40, height: 40, borderRadius: '50%', backgroundColor: u.role === 'admin' ? '#f3e8ff' : u.role === 'venue' ? '#dbeafe' : '#fdf2f8', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 18 }}>
                 {u.role === 'admin' ? '🔑' : u.role === 'venue' ? '🏪' : '👤'}
-              </span>
-              <div className="flex-1">
-                <p className="font-semibold text-gray-800">{u.name}</p>
-                <p className="text-xs text-gray-400">{u.email}</p>
               </div>
-              <span className="text-xs bg-gray-100 text-gray-500 px-2 py-1 rounded-full">
-                {u.role}
-              </span>
+              <div style={{ flex: 1 }}>
+                <p style={{ fontWeight: 600, color: '#1c1917', marginBottom: 2 }}>{u.name}</p>
+                <p style={{ fontSize: 12, color: '#a8a29e' }}>{u.email}</p>
+              </div>
+              <div style={{ textAlign: 'right' }}>
+                <span style={{
+                  fontSize: 11, padding: '3px 10px', borderRadius: 99, fontWeight: 600,
+                  backgroundColor: u.role === 'admin' ? '#f3e8ff' : u.role === 'venue' ? '#dbeafe' : '#fdf2f8',
+                  color: u.role === 'admin' ? '#7c3aed' : u.role === 'venue' ? '#2563eb' : '#ec4899',
+                }}>
+                  {u.role}
+                </span>
+                {u.orders > 0 && <p style={{ fontSize: 11, color: '#a8a29e', marginTop: 3 }}>{u.orders} заказов</p>}
+              </div>
             </div>
           ))}
         </div>
       )}
+    </div>
+  )
+}
+
+function AdminOrderCard({ order, onUpdate }) {
+  const status = ORDER_STATUSES[order.status] || { label: order.status, color: 'text-gray-600 bg-gray-100' }
+  const statusKeys = ['pending', 'confirmed', 'preparing', 'ready', 'delivered']
+
+  return (
+    <div style={{ backgroundColor: '#fff', borderRadius: 18, border: '1px solid #f0ede8', padding: '16px 20px' }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 10 }}>
+        <div>
+          <span style={{ fontWeight: 700, color: '#1c1917' }}>{order.id}</span>
+          <span style={{ color: '#a8a29e', fontSize: 13, marginLeft: 8 }}>· {order.name}</span>
+        </div>
+        <span style={{ fontSize: 11, fontWeight: 600, padding: '4px 10px', borderRadius: 99 }} className={status.color}>
+          {status.label}
+        </span>
+      </div>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12, fontSize: 13, color: '#78716c' }}>
+        <span>{order.items.length} позиций · {order.delivery === 'delivery' ? 'Доставка' : 'Самовывоз'}</span>
+        <span style={{ fontWeight: 700, color: '#ec4899', fontSize: 16 }}>{order.total.toLocaleString()} ₸</span>
+      </div>
+      <div style={{ display: 'flex', gap: 6 }}>
+        {statusKeys.map((s) => (
+          <button
+            key={s}
+            onClick={() => onUpdate(order.id, s)}
+            style={{
+              flex: 1,
+              fontSize: 10,
+              padding: '6px 4px',
+              borderRadius: 8,
+              border: `1px solid ${order.status === s ? '#1c1917' : '#e7e5e4'}`,
+              backgroundColor: order.status === s ? '#1c1917' : '#fff',
+              color: order.status === s ? '#fff' : '#a8a29e',
+              cursor: 'pointer',
+              fontWeight: order.status === s ? 700 : 400,
+            }}
+          >
+            {ORDER_STATUSES[s].label.split(' ')[0]}
+          </button>
+        ))}
+      </div>
+    </div>
+  )
+}
+
+function Empty({ children }) {
+  return (
+    <div style={{ textAlign: 'center', padding: '32px', color: '#a8a29e', fontSize: 13, backgroundColor: '#fff', borderRadius: 16, border: '1px solid #f0ede8' }}>
+      {children}
     </div>
   )
 }

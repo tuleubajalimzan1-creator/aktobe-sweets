@@ -1,99 +1,263 @@
 import { Link } from 'react-router-dom'
+import { motion } from 'framer-motion'
 import { PRODUCTS } from '../../constants/mockData'
+
+const W = { maxWidth: 1280, margin: '0 auto', padding: '0 40px' }
+
+function FadeIn({ children, delay = 0, style = {} }) {
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 24 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: '-40px' }}
+      transition={{ duration: 0.6, ease: [0.25, 0.1, 0.25, 1], delay }}
+      style={style}
+    >
+      {children}
+    </motion.div>
+  )
+}
 
 export default function HomePage() {
   const featured = PRODUCTS.slice(0, 3)
 
   return (
-    <div className="space-y-12">
+    <div style={{ backgroundColor: '#faf8f4' }}>
 
-      {/* Герой-баннер */}
-      <section className="bg-gradient-to-br from-pink-50 to-rose-100 rounded-3xl px-8 py-12 flex flex-col md:flex-row items-center gap-8">
-        <div className="flex-1 space-y-4">
-          <p className="text-pink-500 font-medium text-sm uppercase tracking-wide">Город Актобе</p>
-          <h1 className="text-4xl md:text-5xl font-bold text-gray-800 leading-tight">
-            Торты и сладости <br />
-            <span className="text-pink-500">с любовью</span>
-          </h1>
-          <p className="text-gray-500 text-lg">
-            Заказывайте десерты от лучших кондитерских города. Доставка или самовывоз.
-          </p>
-          <div className="flex gap-3 flex-wrap">
-            <Link
-              to="/catalog"
-              className="bg-pink-500 hover:bg-pink-600 text-white font-semibold px-6 py-3 rounded-full transition"
+      {/* ── HERO ── */}
+      <section style={{ backgroundColor: '#faf8f4', minHeight: '88vh', display: 'flex', alignItems: 'center', position: 'relative', overflow: 'hidden' }}>
+
+        {/* 3-колоночная сетка: фото | текст | фото */}
+        <div style={{ width: '100%', display: 'grid', gridTemplateColumns: '1fr 420px 1fr', alignItems: 'center', minHeight: '88vh' }}>
+
+          {/* Левые фото */}
+          <div style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', gap: 12, paddingRight: 32, paddingTop: 40 }}>
+            <motion.img
+              initial={{ opacity: 0, x: -30 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.9, delay: 0.3 }}
+              src="https://images.unsplash.com/photo-1578985545062-69928b1d9587?w=400&q=85"
+              alt="Торт"
+              style={{ width: 170, height: 260, objectFit: 'cover', borderRadius: 18, boxShadow: '0 20px 60px rgba(0,0,0,0.12)' }}
+            />
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 12, marginTop: 60 }}>
+              <motion.img
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.9, delay: 0.45 }}
+                src="https://images.unsplash.com/photo-1562440499-64c9a111f713?w=400&q=85"
+                alt="Наполеон"
+                style={{ width: 130, height: 160, objectFit: 'cover', borderRadius: 14, boxShadow: '0 12px 40px rgba(0,0,0,0.1)' }}
+              />
+              <motion.img
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.9, delay: 0.55 }}
+                src="https://images.unsplash.com/photo-1603532648955-039310d9ed75?w=400&q=85"
+                alt="Эклеры"
+                style={{ width: 130, height: 120, objectFit: 'cover', borderRadius: 14, boxShadow: '0 12px 40px rgba(0,0,0,0.1)' }}
+              />
+            </div>
+          </div>
+
+          {/* Центральный текст */}
+          <div style={{ textAlign: 'center', padding: '60px 0', zIndex: 2 }}>
+            <motion.p
+              initial={{ opacity: 0, y: 16 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6 }}
+              style={{ color: '#c084fc', letterSpacing: '0.35em', textTransform: 'uppercase', fontSize: 10, fontWeight: 500, marginBottom: 20 }}
             >
-              Смотреть каталог
-            </Link>
-            <Link
-              to="/constructor"
-              className="bg-white hover:bg-pink-50 text-pink-500 font-semibold px-6 py-3 rounded-full border border-pink-200 transition"
+              Город Актобе
+            </motion.p>
+
+            <motion.h1
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.1 }}
+              style={{ fontFamily: "'Cormorant Garamond', serif", color: '#1c1917', lineHeight: 1.05, fontWeight: 700, marginBottom: 20, fontSize: 'clamp(3.2rem, 5.5vw, 5.5rem)' }}
             >
-              Собрать свой торт ✨
-            </Link>
+              Торты<br />
+              <em style={{ color: '#ec4899', fontStyle: 'normal' }}>с душой</em>
+            </motion.h1>
+
+            <motion.p
+              initial={{ opacity: 0, y: 14 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.2 }}
+              style={{ color: '#78716c', fontSize: 15, maxWidth: 340, margin: '0 auto 32px', lineHeight: 1.75, fontWeight: 300 }}
+            >
+              Десерты от лучших кондитеров Актобе. Готовые изделия или созданные специально для вас.
+            </motion.p>
+
+            <motion.div
+              initial={{ opacity: 0, y: 14 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.3 }}
+              style={{ display: 'flex', gap: 12, justifyContent: 'center', flexWrap: 'wrap' }}
+            >
+              <Link to="/catalog"
+                style={{ backgroundColor: '#1c1917', color: '#fff', fontWeight: 500, padding: '13px 32px', borderRadius: 99, textDecoration: 'none', fontSize: 13, letterSpacing: '0.08em' }}>
+                СМОТРЕТЬ КАТАЛОГ
+              </Link>
+              <Link to="/constructor"
+                style={{ border: '1.5px solid #1c1917', color: '#1c1917', fontWeight: 500, padding: '13px 32px', borderRadius: 99, textDecoration: 'none', fontSize: 13, letterSpacing: '0.08em' }}>
+                СОБРАТЬ ТОРТ ✨
+              </Link>
+            </motion.div>
+          </div>
+
+          {/* Правые фото */}
+          <div style={{ display: 'flex', justifyContent: 'flex-start', alignItems: 'center', gap: 12, paddingLeft: 32, paddingTop: 40 }}>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 12, marginTop: -60 }}>
+              <motion.img
+                initial={{ opacity: 0, x: 20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.9, delay: 0.45 }}
+                src="https://images.unsplash.com/photo-1533134242443-d4fd215305ad?w=400&q=85"
+                alt="Чизкейк"
+                style={{ width: 130, height: 150, objectFit: 'cover', borderRadius: 14, boxShadow: '0 12px 40px rgba(0,0,0,0.1)' }}
+              />
+              <motion.img
+                initial={{ opacity: 0, x: 20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.9, delay: 0.55 }}
+                src="https://images.unsplash.com/photo-1569864358642-9d1684040f43?w=400&q=85"
+                alt="Макаруны"
+                style={{ width: 130, height: 130, objectFit: 'cover', borderRadius: 14, boxShadow: '0 12px 40px rgba(0,0,0,0.1)' }}
+              />
+            </div>
+            <motion.img
+              initial={{ opacity: 0, x: 30 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.9, delay: 0.35 }}
+              src="https://images.unsplash.com/photo-1586985289688-ca3cf47d3e6e?w=400&q=85"
+              alt="Торт 2"
+              style={{ width: 170, height: 280, objectFit: 'cover', borderRadius: 18, boxShadow: '0 20px 60px rgba(0,0,0,0.12)' }}
+            />
           </div>
         </div>
-        <div className="text-9xl select-none">🎂</div>
-      </section>
 
-      {/* Категории */}
-      <section>
-        <h2 className="text-2xl font-bold text-gray-800 mb-4">Что хотите?</h2>
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-          {CATEGORY_CARDS.map((c) => (
-            <Link
-              key={c.label}
-              to={c.to}
-              className="bg-white rounded-2xl p-6 text-center shadow-sm hover:shadow-md transition hover:-translate-y-1 border border-gray-100"
-            >
-              <div className="text-4xl mb-2">{c.icon}</div>
-              <div className="font-semibold text-gray-700">{c.label}</div>
-              <div className="text-xs text-gray-400 mt-1">{c.sub}</div>
-            </Link>
-          ))}
-        </div>
-      </section>
-
-      {/* Популярные товары */}
-      <section>
-        <div className="flex items-center justify-between mb-4">
-          <h2 className="text-2xl font-bold text-gray-800">Популярное</h2>
-          <Link to="/catalog" className="text-pink-500 hover:underline text-sm font-medium">
-            Все товары →
-          </Link>
-        </div>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {featured.map((product) => (
-            <ProductCard key={product.id} product={product} />
-          ))}
-        </div>
-      </section>
-
-      {/* Баннер конструктора */}
-      <section className="bg-gradient-to-r from-violet-500 to-pink-500 rounded-3xl p-8 text-white flex flex-col md:flex-row items-center justify-between gap-6">
-        <div>
-          <h2 className="text-2xl font-bold mb-2">Собери свой торт</h2>
-          <p className="text-white/80">
-            Выбери основу, начинку, оформление и надпись. Мы сделаем торт именно для тебя.
-          </p>
-        </div>
-        <Link
-          to="/constructor"
-          className="bg-white text-pink-500 font-bold px-8 py-3 rounded-full hover:bg-pink-50 transition whitespace-nowrap"
+        {/* Скролл */}
+        <motion.div
+          animate={{ y: [0, 8, 0] }}
+          transition={{ repeat: Infinity, duration: 2.5, ease: 'easeInOut' }}
+          style={{ position: 'absolute', bottom: 24, left: '50%', transform: 'translateX(-50%)', textAlign: 'center', color: '#a8a29e', fontSize: 10, letterSpacing: '0.3em' }}
         >
-          Открыть конструктор
-        </Link>
+          ЛИСТАТЬ ↓
+        </motion.div>
       </section>
 
-      {/* Преимущества */}
-      <section className="grid grid-cols-2 md:grid-cols-4 gap-4 pb-4">
-        {BENEFITS.map((b) => (
-          <div key={b.label} className="text-center space-y-2">
-            <div className="text-3xl">{b.icon}</div>
-            <div className="font-semibold text-gray-700 text-sm">{b.label}</div>
-            <div className="text-xs text-gray-400">{b.sub}</div>
+      {/* ── КАТЕГОРИИ ── */}
+      <section style={{ backgroundColor: '#fff', padding: '56px 0' }}>
+        <div style={W}>
+          <FadeIn style={{ marginBottom: 36 }}>
+            <p style={{ color: '#c084fc', letterSpacing: '0.3em', textTransform: 'uppercase', fontSize: 10, fontWeight: 500, marginBottom: 12 }}>Что вас интересует</p>
+            <h2 style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 'clamp(1.8rem, 3vw, 2.6rem)', fontWeight: 700, color: '#1c1917' }}>Наш ассортимент</h2>
+          </FadeIn>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 16 }}>
+            {CATEGORIES_DATA.map((c, i) => (
+              <FadeIn key={c.label} delay={i * 0.08}>
+                <Link to={c.to} style={{ textDecoration: 'none', display: 'block', backgroundColor: '#faf8f4', borderRadius: 20, overflow: 'hidden', border: '1px solid #f0ede8', transition: 'all 0.25s' }}
+                  onMouseEnter={e => { e.currentTarget.style.boxShadow = '0 10px 32px rgba(0,0,0,0.08)'; e.currentTarget.style.borderColor = '#fbcfe8' }}
+                  onMouseLeave={e => { e.currentTarget.style.boxShadow = 'none'; e.currentTarget.style.borderColor = '#f0ede8' }}
+                >
+                  <div style={{ height: 120, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 48 }}>{c.icon}</div>
+                  <div style={{ padding: '14px 18px 18px' }}>
+                    <p style={{ fontWeight: 600, color: '#1c1917', fontSize: 14, letterSpacing: '0.02em', marginBottom: 3 }}>{c.label}</p>
+                    <p style={{ color: '#a8a29e', fontSize: 12 }}>{c.sub}</p>
+                  </div>
+                </Link>
+              </FadeIn>
+            ))}
           </div>
-        ))}
+        </div>
+      </section>
+
+      {/* ── ПОПУЛЯРНОЕ ── */}
+      <section style={{ backgroundColor: '#faf8f4', padding: '56px 0' }}>
+        <div style={W}>
+          <FadeIn style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', marginBottom: 36 }}>
+            <div>
+              <p style={{ color: '#c084fc', letterSpacing: '0.3em', textTransform: 'uppercase', fontSize: 10, fontWeight: 500, marginBottom: 12 }}>Топ недели</p>
+              <h2 style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 'clamp(1.8rem, 3vw, 2.6rem)', fontWeight: 700, color: '#1c1917' }}>Популярное</h2>
+            </div>
+            <Link to="/catalog" style={{ color: '#a8a29e', textDecoration: 'none', fontSize: 13, letterSpacing: '0.04em' }}>Все товары →</Link>
+          </FadeIn>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 20 }}>
+            {featured.map((product, i) => (
+              <FadeIn key={product.id} delay={i * 0.1}>
+                <ProductCard product={product} />
+              </FadeIn>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ── БАННЕР КОНСТРУКТОРА ── */}
+      <section style={{ backgroundColor: '#fff', padding: '56px 0' }}>
+        <div style={W}>
+          <FadeIn>
+            <div style={{ backgroundColor: '#1c1917', borderRadius: 24, padding: '52px 64px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 32, position: 'relative', overflow: 'hidden' }}>
+              <div style={{ position: 'absolute', inset: 0, background: 'radial-gradient(ellipse at 80% 50%, rgba(244,114,182,0.15), transparent 60%)', pointerEvents: 'none' }} />
+              <div style={{ position: 'relative' }}>
+                <p style={{ color: '#c084fc', letterSpacing: '0.3em', textTransform: 'uppercase', fontSize: 10, fontWeight: 500, marginBottom: 14 }}>Эксклюзив</p>
+                <h2 style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 'clamp(1.6rem, 2.5vw, 2.4rem)', fontWeight: 700, color: '#fff', marginBottom: 12 }}>
+                  Твой торт — твои правила
+                </h2>
+                <p style={{ color: '#78716c', maxWidth: 400, lineHeight: 1.7, fontSize: 14, fontWeight: 300 }}>
+                  Выбери основу, начинку, форму и оформление.
+                </p>
+              </div>
+              <Link to="/constructor"
+                style={{ flexShrink: 0, backgroundColor: '#fff', color: '#1c1917', fontWeight: 600, padding: '14px 36px', borderRadius: 99, textDecoration: 'none', fontSize: 13, letterSpacing: '0.06em', whiteSpace: 'nowrap' }}>
+                ОТКРЫТЬ КОНСТРУКТОР ✨
+              </Link>
+            </div>
+          </FadeIn>
+        </div>
+      </section>
+
+      {/* ── ПАРТНЁРЫ ── */}
+      <section style={{ backgroundColor: '#faf8f4', padding: '56px 0' }}>
+        <div style={W}>
+          <FadeIn style={{ textAlign: 'center', marginBottom: 40 }}>
+            <p style={{ color: '#c084fc', letterSpacing: '0.3em', textTransform: 'uppercase', fontSize: 10, fontWeight: 500, marginBottom: 12 }}>Нам доверяют</p>
+            <h2 style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 'clamp(1.8rem, 3vw, 2.6rem)', fontWeight: 700, color: '#1c1917' }}>Партнёры Актобе</h2>
+          </FadeIn>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 20 }}>
+            {PARTNERS.map((p, i) => (
+              <FadeIn key={p.name} delay={i * 0.12}>
+                <div style={{ backgroundColor: '#fff', border: '1px solid #f0ede8', borderRadius: 20, padding: '32px', display: 'flex', alignItems: 'center', gap: 24, transition: 'all 0.25s' }}
+                  onMouseEnter={e => { e.currentTarget.style.boxShadow = '0 10px 32px rgba(0,0,0,0.07)'; e.currentTarget.style.borderColor = '#fbcfe8' }}
+                  onMouseLeave={e => { e.currentTarget.style.boxShadow = 'none'; e.currentTarget.style.borderColor = '#f0ede8' }}
+                >
+                  <div style={{ width: 64, height: 64, borderRadius: 16, backgroundColor: p.bg, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                    <span style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 26, fontWeight: 700, color: p.textColor }}>{p.short}</span>
+                  </div>
+                  <div>
+                    <h3 style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 22, fontWeight: 700, color: '#1c1917', marginBottom: 6 }}>{p.name}</h3>
+                    <p style={{ color: '#a8a29e', fontSize: 13, lineHeight: 1.6, fontWeight: 300, marginBottom: 8 }}>{p.desc}</p>
+                    <p style={{ color: '#ec4899', fontSize: 10, letterSpacing: '0.2em', textTransform: 'uppercase' }}>{p.tag}</p>
+                  </div>
+                </div>
+              </FadeIn>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ── ПРЕИМУЩЕСТВА ── */}
+      <section style={{ backgroundColor: '#fff', borderTop: '1px solid #f0ede8', padding: '48px 0' }}>
+        <div style={{ ...W, display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 20 }}>
+          {BENEFITS.map((b, i) => (
+            <FadeIn key={b.label} delay={i * 0.08} style={{ textAlign: 'center', padding: '16px' }}>
+              <div style={{ fontSize: 36, marginBottom: 14 }}>{b.icon}</div>
+              <p style={{ fontWeight: 600, color: '#1c1917', fontSize: 13, letterSpacing: '0.03em', marginBottom: 5 }}>{b.label}</p>
+              <p style={{ color: '#a8a29e', fontSize: 12, fontWeight: 300 }}>{b.sub}</p>
+            </FadeIn>
+          ))}
+        </div>
       </section>
 
     </div>
@@ -102,39 +266,43 @@ export default function HomePage() {
 
 function ProductCard({ product }) {
   return (
-    <Link
-      to={`/product/${product.id}`}
-      className="bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition hover:-translate-y-1 border border-gray-100"
+    <Link to={`/product/${product.id}`} style={{ textDecoration: 'none', display: 'block', backgroundColor: '#fff', borderRadius: 20, overflow: 'hidden', border: '1px solid #f0ede8', transition: 'all 0.25s' }}
+      onMouseEnter={e => { e.currentTarget.style.boxShadow = '0 16px 48px rgba(0,0,0,0.09)' }}
+      onMouseLeave={e => { e.currentTarget.style.boxShadow = 'none' }}
     >
-      <img
-        src={product.image}
-        alt={product.name}
-        className="w-full h-48 object-cover"
-      />
-      <div className="p-4">
-        <p className="text-xs text-gray-400 mb-1">{product.venue}</p>
-        <h3 className="font-semibold text-gray-800 mb-2">{product.name}</h3>
-        <div className="flex items-center justify-between">
-          <span className="text-pink-500 font-bold text-lg">
-            {product.price.toLocaleString()} ₸
-          </span>
-          <span className="text-xs text-gray-400">⭐ {product.rating}</span>
+      <div style={{ overflow: 'hidden' }}>
+        <img src={product.image} alt={product.name} style={{ width: '100%', height: 210, objectFit: 'cover', display: 'block', transition: 'transform 0.5s' }}
+          onMouseEnter={e => e.target.style.transform = 'scale(1.05)'}
+          onMouseLeave={e => e.target.style.transform = 'scale(1)'}
+        />
+      </div>
+      <div style={{ padding: '20px' }}>
+        <p style={{ color: '#a8a29e', fontSize: 10, letterSpacing: '0.15em', textTransform: 'uppercase', marginBottom: 6 }}>{product.venue}</p>
+        <h3 style={{ fontFamily: "'Cormorant Garamond', serif", fontWeight: 700, color: '#1c1917', fontSize: 20, lineHeight: 1.2, marginBottom: 12 }}>{product.name}</h3>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+          <span style={{ color: '#ec4899', fontWeight: 600, fontSize: 18 }}>{product.price.toLocaleString()} ₸</span>
+          <span style={{ color: '#d6d3d1', fontSize: 12 }}>⭐ {product.rating}</span>
         </div>
       </div>
     </Link>
   )
 }
 
-const CATEGORY_CARDS = [
+const CATEGORIES_DATA = [
   { icon: '🎂', label: 'Торты', sub: 'На заказ и готовые', to: '/catalog' },
   { icon: '🥐', label: 'Выпечка', sub: 'Пирожные, эклеры', to: '/catalog' },
   { icon: '✨', label: 'Конструктор', sub: 'Собери сам', to: '/constructor' },
   { icon: '🎁', label: 'Подарки', sub: 'Наборы и боксы', to: '/catalog' },
 ]
 
+const PARTNERS = [
+  { name: 'Лакомка', short: 'Л', bg: '#fce7f3', textColor: '#db2777', desc: 'Сеть кулинарных магазинов Актобе. Домашние десерты с 2005 года.', tag: 'Официальный партнёр' },
+  { name: 'Samal Cakes', short: 'S', bg: '#fff1f2', textColor: '#f43f5e', desc: 'Авторские торты и капкейки. Индивидуальный подход к каждому заказу.', tag: 'Официальный партнёр' },
+]
+
 const BENEFITS = [
   { icon: '🚀', label: 'Быстрая доставка', sub: 'По всему Актобе' },
   { icon: '👨‍🍳', label: 'Местные мастера', sub: 'Проверенные кондитеры' },
-  { icon: '💳', label: 'Удобная оплата', sub: 'Kaspi, наличные' },
+  { icon: '💳', label: 'Kaspi · Наличные', sub: 'Удобная оплата' },
   { icon: '⭐', label: 'Гарантия качества', sub: 'Или вернём деньги' },
 ]

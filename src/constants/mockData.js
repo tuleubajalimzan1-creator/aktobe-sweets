@@ -111,6 +111,7 @@ export const CONSTRUCTOR_OPTIONS = {
 }
 
 export const ORDER_STATUSES = {
+  bidding: { label: 'Приём ставок', color: 'text-purple-600 bg-purple-50' },
   pending: { label: 'Ожидает подтверждения', color: 'text-yellow-600 bg-yellow-50' },
   confirmed: { label: 'Подтверждён', color: 'text-blue-600 bg-blue-50' },
   preparing: { label: 'Готовится', color: 'text-orange-600 bg-orange-50' },
