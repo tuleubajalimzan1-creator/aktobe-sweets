@@ -69,4 +69,26 @@ h1, h2, h3, h4 {
 
   /* Mobile hero image */
   .mob-hero-img { display: block !important; }
+
+  /* Constructor */
+  .constructor-wrap { padding: 24px 16px 40px !important; }
+  .constructor-grid { grid-template-columns: 1fr !important; gap: 16px !important; }
+  .constructor-preview { position: static !important; order: -1; }
+  .constructor-preview-inner { padding: 20px 16px !important; }
+  .constructor-cake-scale { transform: scale(0.75) !important; transform-origin: top center !important; margin-bottom: -40px !important; }
+  .constructor-steps { gap: 6px !important; margin-bottom: 20px !important; }
+  .constructor-step-btn { padding: 6px 12px !important; font-size: 12px !important; }
+  .constructor-step-btn span:last-child { display: none; }
+  .constructor-options { padding: 20px !important; }
+
+  /* Cart */
+  .cart-layout { flex-direction: column !important; }
+  .cart-summary { position: static !important; }
+
+  /* Admin stats */
+  .admin-stats { grid-template-columns: repeat(2, 1fr) !important; gap: 10px !important; }
+  .admin-wrap { padding: 24px 16px !important; }
+
+  /* Pages using max-w Tailwind — add side padding */
+  .max-w-md, .max-w-2xl, .max-w-xl { padding-left: 16px !important; padding-right: 16px !important; }
 }

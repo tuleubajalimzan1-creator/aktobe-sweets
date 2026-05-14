@@ -77,21 +77,21 @@ export default function ConstructorPage() {
 
   return (
     <div style={{ backgroundColor: '#faf8f4', minHeight: '100vh' }}>
-      <div style={{ maxWidth: 1280, margin: '0 auto', padding: '48px 40px' }}>
+      <div className="constructor-wrap" style={{ maxWidth: 1280, margin: '0 auto', padding: '48px 40px' }}>
 
         {/* Заголовок */}
-        <div style={{ marginBottom: 40 }}>
+        <div style={{ marginBottom: 32 }}>
           <p style={{ color: '#c084fc', letterSpacing: '0.3em', textTransform: 'uppercase', fontSize: 10, fontWeight: 500, marginBottom: 10 }}>Создай сам</p>
-          <h1 style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 'clamp(2rem, 4vw, 3.2rem)', fontWeight: 700, color: '#1c1917' }}>Конструктор торта</h1>
+          <h1 style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 'clamp(1.8rem, 4vw, 3.2rem)', fontWeight: 700, color: '#1c1917' }}>Конструктор торта</h1>
         </div>
 
         {/* Шаги — горизонтальные таблетки */}
-        <div style={{ display: 'flex', gap: 8, marginBottom: 32, flexWrap: 'wrap' }}>
+        <div className="constructor-steps" style={{ display: 'flex', gap: 8, marginBottom: 32, flexWrap: 'wrap' }}>
           {STEPS.map((s, i) => {
             const done = i < step
             const active = i === step
             return (
-              <button key={s.key} onClick={() => go(i)}
+              <button key={s.key} onClick={() => go(i)} className="constructor-step-btn"
                 style={{ display: 'flex', alignItems: 'center', gap: 6, padding: '8px 16px', borderRadius: 99, border: 'none', cursor: 'pointer', fontSize: 13, fontWeight: 500, transition: 'all 0.2s',
                   backgroundColor: active ? '#1c1917' : done ? '#fce7f3' : '#fff',
                   color: active ? '#fff' : done ? '#ec4899' : '#a8a29e',
@@ -116,7 +116,7 @@ export default function ConstructorPage() {
         </div>
 
         {/* Основная сетка */}
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 400px', gap: 32, alignItems: 'start' }}>
+        <div className="constructor-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 400px', gap: 32, alignItems: 'start' }}>
 
           {/* Левая панель — опции */}
           <div>
@@ -128,6 +128,7 @@ export default function ConstructorPage() {
                 animate={{ opacity: 1, x: 0 }}
                 exit={{ opacity: 0, x: dir * -32 }}
                 transition={{ duration: 0.22, ease: 'easeOut' }}
+                className="constructor-options"
                 style={{ backgroundColor: '#fff', borderRadius: 24, border: '1px solid #f0ede8', padding: 32 }}
               >
                 <h2 style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 26, fontWeight: 700, color: '#1c1917', marginBottom: 24, display: 'flex', alignItems: 'center', gap: 10 }}>
@@ -237,8 +238,8 @@ export default function ConstructorPage() {
           </div>
 
           {/* Правая панель — превью торта */}
-          <div style={{ position: 'sticky', top: 100 }}>
-            <div style={{ backgroundColor: '#fff', borderRadius: 24, border: '1px solid #f0ede8', padding: '32px 24px', textAlign: 'center' }}>
+          <div className="constructor-preview" style={{ position: 'sticky', top: 100 }}>
+            <div className="constructor-preview-inner" style={{ backgroundColor: '#fff', borderRadius: 24, border: '1px solid #f0ede8', padding: '32px 24px', textAlign: 'center' }}>
               <p style={{ color: '#a8a29e', letterSpacing: '0.2em', textTransform: 'uppercase', fontSize: 10, marginBottom: 32 }}>Предварительный вид</p>
 
               {/* Торт */}
@@ -246,6 +247,7 @@ export default function ConstructorPage() {
                 <motion.div
                   animate={{ y: [0, -8, 0] }}
                   transition={{ repeat: Infinity, duration: 3.5, ease: 'easeInOut' }}
+                  className="constructor-cake-scale"
                   style={{ transform: `scale(${sizeW})`, transformOrigin: 'bottom center' }}
                 >
                   <CakeView

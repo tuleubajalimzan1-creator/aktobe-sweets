@@ -38,14 +38,14 @@ export default function AdminPage() {
   ]
 
   return (
-    <div style={{ maxWidth: 1000, margin: '0 auto', padding: '40px 24px' }}>
+    <div className="admin-wrap" style={{ maxWidth: 1000, margin: '0 auto', padding: '40px 24px' }}>
       <p style={{ color: '#f472b6', letterSpacing: '0.3em', textTransform: 'uppercase', fontSize: 10, marginBottom: 8 }}>Управление</p>
       <h1 style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 30, fontWeight: 700, color: '#1c1917', marginBottom: 28 }}>
         Админ-панель
       </h1>
 
       {/* Stats */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 14, marginBottom: 28 }}>
+      <div className="admin-stats" style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 14, marginBottom: 28 }}>
         {stats.map((s) => (
           <div key={s.label} style={{ backgroundColor: '#fff', borderRadius: 18, border: '1px solid #f0ede8', padding: '18px', textAlign: 'center' }}>
             <div style={{ fontSize: 28, marginBottom: 6 }}>{s.icon}</div>
