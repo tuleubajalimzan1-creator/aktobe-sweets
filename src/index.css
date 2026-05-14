@@ -30,3 +30,43 @@ h1, h2, h3, h4 {
 .serif {
   font-family: var(--font-serif);
 }
+
+/* ── Mobile responsive ── */
+@media (max-width: 767px) {
+  /* Header */
+  .desk-nav { display: none !important; }
+  .mob-header-inner { padding: 0 16px !important; }
+
+  /* Page padding */
+  .page-w { padding-left: 16px !important; padding-right: 16px !important; }
+
+  /* Hero */
+  .hero-grid { display: flex !important; flex-direction: column !important; min-height: auto !important; padding: 48px 0 32px !important; }
+  .hero-photos { display: none !important; }
+  .hero-center { padding: 0 24px !important; }
+  .hero-h1 { font-size: 3rem !important; }
+  .hero-btns { flex-direction: column !important; align-items: center !important; }
+  .hero-btns a { width: 100% !important; text-align: center !important; }
+
+  /* Grids */
+  .grid-4 { grid-template-columns: repeat(2, 1fr) !important; gap: 10px !important; }
+  .grid-3 { grid-template-columns: 1fr !important; }
+  .grid-2 { grid-template-columns: 1fr !important; }
+  .grid-benefits { grid-template-columns: repeat(2, 1fr) !important; gap: 12px !important; }
+
+  /* Banner */
+  .cta-banner { flex-direction: column !important; padding: 32px 24px !important; gap: 20px !important; }
+  .cta-banner a { width: 100% !important; text-align: center !important; }
+
+  /* Section padding */
+  .sec-pad { padding: 40px 0 !important; }
+
+  /* Partner cards */
+  .partner-card { padding: 20px !important; gap: 16px !important; }
+
+  /* Bottom nav padding */
+  .main-content { padding-bottom: 72px; }
+
+  /* Mobile hero image */
+  .mob-hero-img { display: block !important; }
+}

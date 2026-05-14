@@ -45,22 +45,22 @@ export default function Header() {
 
   return (
     <>
-      {/* Топ-бар */}
-      <div style={{ backgroundColor: '#1c1917', color: '#a8a29e', fontSize: 11, textAlign: 'center', padding: '9px 0', letterSpacing: '0.2em' }}>
+      {/* Топ-бар — скрыт на мобиле */}
+      <div className="desk-nav" style={{ backgroundColor: '#1c1917', color: '#a8a29e', fontSize: 11, textAlign: 'center', padding: '9px 0', letterSpacing: '0.2em' }}>
         ДОСТАВКА ПО ВСЕМУ АКТОБЕ · +7 700 000 00 00
       </div>
 
       <header style={{ backgroundColor: '#fff', borderBottom: '1px solid #f0ede8', position: 'sticky', top: 0, zIndex: 50 }}>
-        <div style={{ maxWidth: 1280, margin: '0 auto', padding: '0 32px', height: 70, display: 'flex', alignItems: 'center', position: 'relative' }}>
+        <div className="mob-header-inner" style={{ maxWidth: 1280, margin: '0 auto', padding: '0 32px', height: 70, display: 'flex', alignItems: 'center', position: 'relative' }}>
 
-          {/* Левая навигация — прижата к правому краю (к логотипу) */}
-          <nav style={{ display: 'flex', alignItems: 'center', flex: 1, justifyContent: 'flex-end', paddingRight: 56 }}>
+          {/* Левая навигация — только десктоп */}
+          <nav className="desk-nav" style={{ display: 'flex', alignItems: 'center', flex: 1, justifyContent: 'flex-end', paddingRight: 56 }}>
             {NAV_LEFT.map((item) => (
               <NavItem key={item.label} item={item} open={open} close={close} openMenu={openMenu} setOpenMenu={setOpenMenu} />
             ))}
           </nav>
 
-          {/* Логотип — точно по центру через absolute */}
+          {/* Логотип — центр */}
           <Link to="/" style={{ position: 'absolute', left: '50%', transform: 'translateX(-50%)', textDecoration: 'none', textAlign: 'center' }}>
             <div style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 22, fontWeight: 600, color: '#1c1917', letterSpacing: '0.1em', lineHeight: 1 }}>
               Актобе
@@ -70,15 +70,17 @@ export default function Header() {
             </div>
           </Link>
 
-          {/* Правая навигация — прижата к левому краю (к логотипу) */}
-          <nav style={{ display: 'flex', alignItems: 'center', flex: 1, justifyContent: 'flex-start', paddingLeft: 56 }}>
+          {/* Правая навигация — ссылки только на десктопе */}
+          <nav className="desk-nav" style={{ display: 'flex', alignItems: 'center', flex: 1, justifyContent: 'flex-start', paddingLeft: 56 }}>
             {(user ? NAV_RIGHT.filter((i) => i.label === 'Акции') : NAV_RIGHT).map((item) => (
               <NavItem key={item.label} item={item} open={open} close={close} openMenu={openMenu} setOpenMenu={setOpenMenu} alignRight />
             ))}
-
             <div style={{ width: 1, height: 18, backgroundColor: '#e7e5e4', margin: '0 14px' }} />
+          </nav>
 
-            <Link to="/cart" style={{ position: 'relative', padding: '6px 8px', textDecoration: 'none', fontSize: 17 }}>
+          {/* Корзина + пользователь — видно всегда, на мобиле прижато вправо */}
+          <div style={{ position: 'absolute', right: 16, display: 'flex', alignItems: 'center', gap: 4 }}>
+            <Link to="/cart" style={{ position: 'relative', padding: '6px 8px', textDecoration: 'none', fontSize: 19 }}>
               🛒
               {cartCount > 0 && (
                 <span style={{ position: 'absolute', top: 0, right: 0, backgroundColor: '#ec4899', color: '#fff', fontSize: 9, borderRadius: '50%', width: 15, height: 15, display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 700 }}>
@@ -90,7 +92,7 @@ export default function Header() {
             {user ? (
               <Link
                 to={role === 'admin' ? '/admin' : role === 'venue' ? '/venue' : '/profile'}
-                style={{ marginLeft: 8, display: 'flex', alignItems: 'center', gap: 7, padding: '5px 12px 5px 7px', borderRadius: 99, border: '1px solid #f0ede8', backgroundColor: '#faf8f6', textDecoration: 'none' }}
+                style={{ display: 'flex', alignItems: 'center', gap: 7, padding: '5px 12px 5px 7px', borderRadius: 99, border: '1px solid #f0ede8', backgroundColor: '#faf8f6', textDecoration: 'none' }}
               >
                 <span style={{
                   fontSize: 10, fontWeight: 600, padding: '2px 8px', borderRadius: 99, letterSpacing: '0.04em',
@@ -99,7 +101,7 @@ export default function Header() {
                 }}>
                   {role === 'admin' ? 'Админ' : role === 'venue' ? 'Кондитер' : 'Клиент'}
                 </span>
-                <span style={{ fontSize: 12, color: '#57534e', maxWidth: 80, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{user.name}</span>
+                <span className="desk-nav" style={{ fontSize: 12, color: '#57534e', maxWidth: 80, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{user.name}</span>
                 <button
                   onClick={(e) => { e.preventDefault(); logout(); navigate('/') }}
                   style={{ fontSize: 11, color: '#d4cdc8', background: 'none', border: 'none', cursor: 'pointer', padding: 0, lineHeight: 1 }}
@@ -107,11 +109,11 @@ export default function Header() {
               </Link>
             ) : (
               <Link to="/login"
-                style={{ marginLeft: 12, backgroundColor: '#1c1917', color: '#fff', fontSize: 12, fontWeight: 500, padding: '8px 20px', borderRadius: 99, textDecoration: 'none', letterSpacing: '0.05em' }}>
+                style={{ backgroundColor: '#1c1917', color: '#fff', fontSize: 12, fontWeight: 500, padding: '8px 20px', borderRadius: 99, textDecoration: 'none', letterSpacing: '0.05em' }}>
                 Войти
               </Link>
             )}
-          </nav>
+          </div>
         </div>
       </header>
 
