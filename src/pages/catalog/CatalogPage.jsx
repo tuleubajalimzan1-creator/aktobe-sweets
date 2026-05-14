@@ -22,10 +22,10 @@ export default function CatalogPage() {
   }
 
   return (
-    <div className="max-w-7xl mx-auto px-8 py-12">
+    <div className="max-w-7xl mx-auto px-4 md:px-8 py-8 md:py-12">
       <div className="mb-10">
-        <p className="text-pink-400 tracking-[0.3em] uppercase text-xs font-medium mb-3">Все позиции</p>
-        <h1 className="serif text-4xl font-semibold text-stone-900">Каталог</h1>
+        <p className="text-pink-400 tracking-[0.15em] uppercase text-xs font-medium mb-3">Все позиции</p>
+        <h1 className="serif text-3xl md:text-4xl font-semibold text-stone-900">Каталог</h1>
       </div>
 
       <div className="flex flex-col md:flex-row gap-4 mb-8">
