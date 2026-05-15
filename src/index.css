@@ -10,21 +10,14 @@
   --font-serif: 'Cormorant Garamond', Georgia, serif;
   --font-sans: 'DM Sans', system-ui, sans-serif;
   --cream: #fdf8f3;
-  --cream-dark: #f5ede0;
   --chocolate: #2c1810;
-  --chocolate-soft: #4a2e1e;
   --pink: #e8698a;
-  --pink-light: #fce8ed;
   --gold: #c9a96e;
-  --gold-dark: #9a7a4a;
-  --beige: #e8d5bc;
   --muted: #8c7b6e;
-  --border: rgba(232, 213, 188, 0.6);
+  --border: rgba(232,213,188,0.6);
 }
 
-html {
-  scroll-behavior: smooth;
-}
+html { scroll-behavior: smooth; }
 
 body {
   font-family: var(--font-sans);
@@ -34,29 +27,48 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-h1, h2, h3, h4 {
-  font-family: var(--font-serif);
+h1, h2, h3, h4 { font-family: var(--font-serif); }
+.serif { font-family: var(--font-serif); }
+
+/* ── Grain texture overlay on hero ── */
+.grain-hero {
+  position: relative;
+}
+.grain-hero::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 9;
+  pointer-events: none;
+  opacity: 0.032;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.82' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 200px 200px;
 }
 
-.serif {
-  font-family: var(--font-serif);
+/* ── Marquee ── */
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+.marquee-track {
+  display: flex;
+  animation: marquee 26s linear infinite;
+  width: max-content;
+}
+.marquee-track:hover {
+  animation-play-state: paused;
 }
 
 /* ── Premium transitions ── */
-a, button {
-  transition: color 0.2s, background-color 0.2s, border-color 0.2s, box-shadow 0.2s, transform 0.2s;
-}
+a, button { transition: color 0.2s, background-color 0.2s, border-color 0.2s, box-shadow 0.2s; }
 
 /* ── Mobile responsive ── */
 @media (max-width: 767px) {
-  /* Header */
   .desk-nav { display: none !important; }
   .mob-header-inner { padding: 0 16px !important; }
-
-  /* Page padding */
   .page-w { padding-left: 16px !important; padding-right: 16px !important; }
 
-  /* Hero */
   .hero-grid { display: flex !important; flex-direction: column !important; min-height: auto !important; padding: 48px 0 32px !important; }
   .hero-photos { display: none !important; }
   .hero-center { padding: 0 24px !important; }
@@ -66,30 +78,20 @@ a, button {
   .hero-btns a { width: 100% !important; text-align: center !important; box-sizing: border-box !important; }
   .hero-badge { transform: scale(0.9); }
 
-  /* Grids */
   .grid-4 { grid-template-columns: repeat(2, 1fr) !important; gap: 10px !important; }
   .grid-3 { grid-template-columns: 1fr !important; }
   .grid-2 { grid-template-columns: 1fr !important; }
   .grid-benefits { grid-template-columns: repeat(2, 1fr) !important; gap: 12px !important; }
 
-  /* Banner */
   .cta-banner { flex-direction: column !important; padding: 36px 24px !important; gap: 24px !important; }
   .cta-banner > div:last-child { width: 100% !important; }
   .cta-banner a { width: 100% !important; text-align: center !important; }
 
-  /* Section padding */
   .sec-pad { padding: 44px 0 !important; }
-
-  /* Partner cards */
   .partner-card { padding: 20px !important; gap: 16px !important; }
-
-  /* Bottom nav padding */
   .main-content { padding-bottom: 72px; }
-
-  /* Mobile hero image */
   .mob-hero-img { display: block !important; }
 
-  /* Constructor */
   .constructor-wrap { padding: 24px 16px 40px !important; }
   .constructor-grid { grid-template-columns: 1fr !important; gap: 16px !important; }
   .constructor-preview { position: static !important; order: -1; }
@@ -100,14 +102,9 @@ a, button {
   .constructor-step-btn span:last-child { display: none; }
   .constructor-options { padding: 20px !important; }
 
-  /* Cart */
   .cart-layout { flex-direction: column !important; }
   .cart-summary { position: static !important; }
-
-  /* Admin stats */
   .admin-stats { grid-template-columns: repeat(2, 1fr) !important; gap: 10px !important; }
   .admin-wrap { padding: 24px 16px !important; }
-
-  /* Pages using max-w Tailwind — add side padding */
   .max-w-md, .max-w-2xl, .max-w-xl { padding-left: 16px !important; padding-right: 16px !important; }
 }
