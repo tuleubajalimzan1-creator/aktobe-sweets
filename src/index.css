@@ -60,6 +60,9 @@ h1, h2, h3, h4 { font-family: var(--font-serif); }
   animation-play-state: paused;
 }
 
+/* ── Horizontal scroll carousels ── */
+.hscroll::-webkit-scrollbar { display: none; }
+
 /* ── Premium transitions ── */
 a, button { transition: color 0.2s, background-color 0.2s, border-color 0.2s, box-shadow 0.2s; }
 
@@ -107,4 +110,14 @@ a, button { transition: color 0.2s, background-color 0.2s, border-color 0.2s, bo
   .admin-stats { grid-template-columns: repeat(2, 1fr) !important; gap: 10px !important; }
   .admin-wrap { padding: 24px 16px !important; }
   .max-w-md, .max-w-2xl, .max-w-xl { padding-left: 16px !important; padding-right: 16px !important; }
+
+  /* Stats section */
+  .stats-grid { grid-template-columns: repeat(2, 1fr) !important; gap: 24px !important; }
+
+  /* Gallery */
+  .gallery-main { grid-template-columns: 1fr 1fr !important; grid-template-rows: 180px 180px !important; }
+  .gallery-main > *:first-child { grid-row: span 1 !important; }
+  .gallery-main > *:nth-child(4) { grid-column: span 1 !important; }
+  .gallery-bottom { grid-template-columns: 1fr !important; }
+  .gallery-bottom > * { height: 180px !important; }
 }
